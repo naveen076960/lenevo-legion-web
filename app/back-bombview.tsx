@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 
 const FRAME_COUNT = 36;
-const FRAME_EXTENSION = "jpg";
+const FRAME_EXTENSION = "png";
 
 export default function BackBombView() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -159,19 +159,6 @@ export default function BackBombView() {
 
           <div className="story-overlay">
             <motion.div
-              className="story-step story-step-hero"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <span className="kicker">LENEVO LEGION // SYSTEM 09</span>
-
-              <p className="story-copy">
-                A performance platform engineered to move at tactical speed.
-              </p>
-            </motion.div>
-
-            <motion.div
               className="story-step story-step-one"
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -182,10 +169,6 @@ export default function BackBombView() {
               <h2 className="story-title small">
                 Deploy full-system intelligence
               </h2>
-              <p className="story-copy">
-                Unite hardware, signal, and operations into one living command
-                layer.
-              </p>
             </motion.div>
 
             <motion.div

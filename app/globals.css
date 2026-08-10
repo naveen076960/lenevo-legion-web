@@ -182,8 +182,10 @@ body::before {
   bottom: 13%;
   left: 50%;
   transform: translateX(-50%);
-  text-align: center;
   opacity: 0.64;
+  top: 42%;
+  text-align: right;
+  opacity: 0.66;
 }
 
 .story-title {
@@ -408,7 +410,7 @@ body::before {
   }
 
   .story-title.small {
-    font-size: clamp(1.78rem, 9.2vw, 3rem);
+    font-size: clamp(1.5rem, 5.2vw, 2.4rem);
   }
 
   .story-copy {
