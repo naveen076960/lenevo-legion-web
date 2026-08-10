@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 
 const FRAME_COUNT = 36;
+const FRAME_EXTENSION = "jpg";
 
 export default function BackBombView() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -18,7 +19,7 @@ export default function BackBombView() {
     () =>
       Array.from({ length: FRAME_COUNT }, (_, i) => {
         const frameNumber = String(i + 1).padStart(3, "0");
-        return `/back-bombview/ezgif-frame-${frameNumber}.png`;
+        return `/back-bombview/ezgif-frame-${frameNumber}.${FRAME_EXTENSION}`;
       }),
     [],
   );
