@@ -1,26 +1,423 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #050505;
+  --bg-soft: #0b0b0b;
+  --fg: #f4f4f4;
+  --soft: rgba(255, 255, 255, 0.64);
+  --subtle: rgba(255, 255, 255, 0.38);
+  --line: rgba(255, 255, 255, 0.14);
+  --panel: rgba(255, 255, 255, 0.03);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Inter", "Geist", "SF Pro Display", Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -30%;
+  pointer-events: none;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+  mask-image: radial-gradient(#000, transparent);
+  opacity: 0.35;
+  z-index: -1;
+}
+
+.lenevo-page {
+  background: var(--bg);
+}
+
+.scroll-bombview-section {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.sticky-canvas-frame {
+  height: 400vh;
+  position: relative;
+  background: var(--bg);
+}
+
+.scroll-bombview-canvas-wrap {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-bombview-canvas-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -8%;
+  background: radial-gradient(circle, transparent 54%, rgba(0, 0, 0, 0.74));
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scroll-bombview-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  display: block;
+  object-fit: cover;
+  outline: none;
+  border: 0;
+}
+
+.canvas-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 3;
+  background: radial-gradient(circle, rgba(30, 30, 30, 0.92), var(--bg));
+  transition: opacity 300ms ease;
+}
+
+.loader-orb {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-orb span {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+  animation: spin 900ms linear infinite;
+}
+
+.loader-text {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--soft);
+}
+
+.loader-progress {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--subtle);
+}
+
+.story-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.story-step {
+  position: absolute;
+  width: min(48vw, 620px);
+  color: white;
+}
+
+.story-step-hero {
+  text-align: center;
+  top: 22%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.story-step-one {
+  left: 8%;
+  top: 42%;
+  text-align: left;
+  opacity: 0.66;
+}
+
+.story-step-two {
+  right: 8%;
+  top: 48%;
+  text-align: right;
+  opacity: 0.66;
+}
+
+.story-step-cta {
+  bottom: 13%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  opacity: 0.64;
+}
+
+.story-title {
+  margin: 0;
+  font-weight: 300;
+  font-size: clamp(3.4rem, 7.2vw, 8rem);
+  line-height: 0.86;
+  letter-spacing: -0.08em;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.story-title.small {
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.story-copy {
+  margin: 20px 0 0;
+  max-width: 580px;
+  font-size: clamp(0.88rem, 1.55vw, 1.36rem);
+  line-height: 1.8;
+  color: var(--soft);
+}
+
+.story-step-one .story-copy,
+.story-step-two .story-copy {
+  font-size: clamp(0.78rem, 1.4vw, 1rem);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.kicker::before,
+.kicker::after {
+  content: "";
+  height: 1px;
+  width: 34px;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.cta-button {
+  margin-top: 28px;
+  padding: 14px 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: transparent;
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.cta-button:hover {
+  border-color: white;
+  background: white;
+  color: black;
+}
+
+.legion-story-section,
+.legion-cta-section {
+  background: var(--bg);
+  color: white;
+}
+
+.legion-story-section {
+  padding: 110px 24px;
+}
+
+.legion-story-inner,
+.legion-cta-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.two-column-layout {
+  display: grid;
+  grid-template-columns: minmax(620px, 1fr) minmax(340px, 480px);
+  align-items: end;
+  gap: 48px;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.section-eyebrow::before {
+  content: "";
+  width: 40px;
+  height: 1px;
+  background: white;
+}
+
+.section-title {
+  margin: 18px 0 0;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 0.96;
+  font-weight: 300;
+  letter-spacing: -0.05em;
+}
+
+.section-title.compact {
+  font-size: clamp(1.9rem, 3.4vw, 3rem);
+}
+
+.section-copy {
+  margin: 26px 0 0;
+  max-width: 620px;
+  color: var(--soft);
+  font-size: 1rem;
+  line-height: 1.92;
+}
+
+.signal-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.signal-stack > div {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.signal-stack .signal-label {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--subtle);
+  text-transform: uppercase;
+}
+
+.signal-stack .signal-value {
+  font-size: 1rem;
+  color: white;
+}
+
+.legion-cta-section {
+  padding: 110px 24px 140px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.03));
+}
+
+.legion-cta-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  border-top: 1px solid var(--line);
+  padding-top: 44px;
+}
+
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 36px;
+  border-radius: 999px;
+  color: white;
+  border: 1px solid white;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.primary-button:hover {
+  background: white;
+  color: black;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .two-column-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .legion-cta-inner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .story-step-hero {
+    top: 12%;
+  }
+
+  .story-step-one {
+    left: 24px;
+    top: 34%;
+    width: min(78vw, 420px);
+  }
+
+  .story-step-two {
+    right: 24px;
+    top: 57%;
+    width: min(78vw, 420px);
+  }
+
+  .story-title {
+    font-size: clamp(2.8rem, 14vw, 4.8rem);
+  }
+
+  .story-title.small {
+    font-size: clamp(1.78rem, 9.2vw, 3rem);
+  }
+
+  .story-copy {
+    font-size: 0.84rem;
+    line-height: 1.55;
+  }
+
+  .scroll-bombview-canvas {
+    height: 100%;
+    width: 100%;
+  }
 }
